@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 
 class TicketController extends Controller
 {
@@ -23,6 +25,7 @@ class TicketController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request): Response
     {
@@ -50,6 +53,8 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket): Response
     {
+        Gate::authorize("isOwner", $ticket);
+
         return response($ticket);
     }
 
@@ -59,9 +64,12 @@ class TicketController extends Controller
      * @param Request $request
      * @param Ticket $ticket
      * @return Response
+     * @throws ValidationException
      */
-    public function update(Request $request, Ticket $ticket)
+    public function update(Request $request, Ticket $ticket): Response
     {
+        Gate::authorize("isOwner", $ticket);
+
         validator(request()->all(), [
             'subject' => "required",
             'content' => "required",
@@ -82,6 +90,8 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket): Response
     {
+        Gate::authorize("isOwner", $ticket);
+
         $ticket->delete();
         return response([
             "message" => "Ticked deleted successfully"
