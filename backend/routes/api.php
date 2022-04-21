@@ -16,7 +16,7 @@ Route::prefix('auth')->group(function () {
 
         Route::post("/signup", "signup");
 
-        Route::get("/logout", "logout")->middleware('auth:sanctum');
+        Route::post("/logout", "logout")->middleware('auth:sanctum');
     }
     );
 
