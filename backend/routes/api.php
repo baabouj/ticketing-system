@@ -22,6 +22,24 @@ Route::prefix('auth')->group(function () {
 
 });
 
+Route::prefix('tickets')->group(function () {
+    Route::controller(\App\Http\Controllers\TicketController::class)->group(function () {
+
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get("/", "index");
+
+            Route::post("/", "store");
+
+            Route::get("/{ticket}", "show");
+
+            Route::put("/{ticket}", "update");
+
+            Route::delete("/{ticket}", "destroy");
+        });
+    }
+    );
+});
+
 Route::fallback(function () {
     return response([
         "message" => "Not Found",
