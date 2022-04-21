@@ -28,9 +28,9 @@ export default function Signup() {
   };
 
   return (
-    <Layout>
-      <div className="self-center flex flex-col items-center justify-center h-screen font-body">
-        <div className="flex justify-center items-center relative w-full text-center">
+    <Layout center>
+      <div>
+        <div className="flex justify-center items-center relative w-full text-center py-2">
           <Link href="/" passHref>
             <IoChevronBack className="text-2xl absolute left-0 hover:cursor-pointer m-2" />
           </Link>
