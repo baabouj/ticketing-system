@@ -60,11 +60,15 @@ export const useAuth = ({ middleware }) => {
   };
 
   const logout = async () => {
-    await axios.get("/auth/logout", {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("token"),
-      },
-    });
+    await axios.post(
+      "/auth/logout",
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
+        },
+      }
+    );
     sessionStorage.removeItem("token");
     mutate(null);
     router.push("/");
