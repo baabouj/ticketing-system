@@ -15,8 +15,10 @@ class TicketController extends Controller
      *
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        Gate::authorize("admin", $request->user());
+
         return response(Ticket::all());
     }
 
@@ -53,7 +55,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket): Response
     {
-        Gate::authorize("isOwner", $ticket);
+        Gate::authorize("owner", $ticket);
 
         return response($ticket);
     }
@@ -68,7 +70,7 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket): Response
     {
-        Gate::authorize("isOwner", $ticket);
+        Gate::authorize("owner", $ticket);
 
         validator(request()->all(), [
             'subject' => "required",
@@ -90,7 +92,7 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket): Response
     {
-        Gate::authorize("isOwner", $ticket);
+        Gate::authorize("owner", $ticket);
 
         $ticket->delete();
         return response([

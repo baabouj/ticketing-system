@@ -15,7 +15,7 @@ class TicketPolicy
      * @param Ticket $ticket
      * @return bool
      */
-    public function isOwner(User $user, Ticket $ticket): bool
+    public function owner(User $user, Ticket $ticket): bool
     {
         return $user->id === $ticket->user_id;
     }
