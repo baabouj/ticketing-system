@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -48,5 +49,19 @@ class UserController extends Controller
         $user->delete();
 
         return response([], 204);
+    }
+
+    /**
+     * Display a listing.
+     *
+     * @param User $user
+     * @return Response
+     */
+    public function tickets(User $user): Response
+    {
+        Gate::authorize("admin", $user);
+
+        $tickets = Ticket::whereBelongsTo($user)->get();
+        return response($tickets);
     }
 }
