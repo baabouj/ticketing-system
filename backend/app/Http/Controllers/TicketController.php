@@ -13,6 +13,7 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Response
      */
     public function index(Request $request): Response
@@ -81,7 +82,7 @@ class TicketController extends Controller
             "subject" => request("subject"),
             "content" => request("content"),
         ]);
-        return \response($ticket);
+        return response($ticket);
     }
 
     /**
@@ -95,8 +96,6 @@ class TicketController extends Controller
         Gate::authorize("owner", $ticket);
 
         $ticket->delete();
-        return response([
-            "message" => "Ticked deleted successfully"
-        ]);
+        return response('', 204);
     }
 }
