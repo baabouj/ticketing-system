@@ -33,15 +33,13 @@ class TicketController extends Controller
     public function store(Request $request): Response
     {
         validator(request()->all(), [
-            'subject' => "required",
-            'content' => "required",
-            'status_id' => "required",
+            "subject" => "required",
+            "content" => "required",
         ])->validate();
 
         $ticket = Ticket::create([
             "subject" => request("subject"),
             "content" => request("content"),
-            "status_id" => request("status_id"),
             "user_id" => $request->user()->id,
         ]);
 
@@ -74,15 +72,15 @@ class TicketController extends Controller
         Gate::authorize("owner", $ticket);
 
         validator(request()->all(), [
-            'subject' => "required",
-            'content' => "required",
+            "subject" => "required",
+            "content" => "required"
         ])->validate();
 
         $ticket->update([
             "subject" => request("subject"),
             "content" => request("content"),
         ]);
-        return response($ticket);
+        return response(request());
     }
 
     /**
@@ -97,5 +95,27 @@ class TicketController extends Controller
 
         $ticket->delete();
         return response('', 204);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Ticket $ticket
+     * @param Request $request
+     * @return Response
+     * @throws ValidationException
+     */
+    public function updateTicketStatus(Ticket $ticket, Request $request): Response
+    {
+        Gate::authorize("admin", $request->user());
+
+        validator(request()->all(), [
+            "status_id" => "required|exists:statuses,id"
+        ])->validate();
+
+        $ticket->update([
+            "status_id" => request("status_id"),
+        ]);
+        return response($ticket);
     }
 }
